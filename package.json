@@ -48,6 +48,7 @@
   "dependencies": {
     "babel": "^5.2.17",
     "classnames": "^2.1.1",
+    "displacement-map": "^0.4.0",
     "eventemitter3": "^1.1.0",
     "flux": "^2.0.3",
     "normalize.css": "^3.0.3",
