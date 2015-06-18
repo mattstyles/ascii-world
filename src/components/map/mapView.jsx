@@ -3,6 +3,10 @@ import React from 'react'
 
 import { to1d } from 'core/utils/maths'
 
+
+// @TODO this should probably be a bit responsive
+const CELL_SIZE = 32
+
 /**
  * Given a bounding box and a map, it'll render the portion that
  * should be showing
@@ -21,8 +25,13 @@ export default class MapView extends React.Component {
     }
 
     componentDidMount() {
+        console.log( 'MapView::componentDidMount' )
         console.log( this.props.map )
         this.ctx = this.refs[ 'map-canvas' ].getDOMNode().getContext( '2d' )
+    }
+
+    componentDidUpdate() {
+        console.log( 'MapView::componentDidUpdate' )
 
         this.renderMap()
     }
@@ -30,20 +39,24 @@ export default class MapView extends React.Component {
     renderMap() {
         // @TODO chunk size should be hard-wired somewhere, probably in config
         let size = Math.sqrt( this.props.map.length )
-        // @TODO again, render size should be worked out better than this as its text rendering
-        let cellSize = {
-            x: ~~( this.width / size ),
-            y: ~~( this.height / size )
+
+        let renderRect = {
+            x1: 0,
+            y1: 0,
+            x2: ~~( this.width / CELL_SIZE ),
+            y2: ~~( this.height / CELL_SIZE )
         }
 
-        this.ctx.clearRect( 0, 0, size * cellSize.x, size * cellSize.y )
+        this.ctx.clearRect( renderRect.x1, renderRect.y1, renderRect.x2, renderRect.y2 )
+        this.ctx.font = CELL_SIZE * 1.2 + 'px sans-serif'
 
         // Render left to right then top to bottom
-        for ( let y = 0; y < size; y++ ) {
-            for ( let x = 0; x < size; x++ ) {
+        // Add one to render size to ensure no ugly blank half edges
+        for ( let y = renderRect.y1; y < renderRect.y2 + 1; y++ ) {
+            for ( let x = renderRect.x1; x < renderRect.x2 + 1; x++ ) {
                 let opacity = this.props.map[ to1d( x, y, size ) ] / 0xff
                 this.ctx.fillStyle = 'rgba( 255, 255, 255, ' + opacity + ' )'
-                this.ctx.fillRect( x * cellSize.x, y * cellSize.y, cellSize.x, cellSize.y )
+                this.ctx.fillText( 'M', x * CELL_SIZE, y * CELL_SIZE )
             }
         }
     }
