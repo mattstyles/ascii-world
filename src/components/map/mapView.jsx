@@ -5,7 +5,11 @@ import { to1d } from 'core/utils/maths'
 
 
 // @TODO this should probably be a bit responsive
-const CELL_SIZE = 32
+const MASTER_CELL_SIZE = 18
+const CELL_SIZE = {
+    x: MASTER_CELL_SIZE * 0.6,
+    y: MASTER_CELL_SIZE * 1
+}
 
 /**
  * Given a bounding box and a map, it'll render the portion that
@@ -36,27 +40,53 @@ export default class MapView extends React.Component {
         this.renderMap()
     }
 
+    getTexture() {
+        // Randomly return for now
+        let texture = [
+            '.',
+            ',',
+            '\'',
+            '\"',
+            ' ',
+            ' ',
+            ' ',
+            ' ',
+            ' ',
+            ' ',
+            ' ',
+            ' ',
+            ' ',
+            ' ',
+            ' ',
+            ' '
+        ]
+
+        return texture[ ~~( Math.random() * texture.length ) ]
+    }
+
     renderMap() {
         // @TODO chunk size should be hard-wired somewhere, probably in config
         let size = Math.sqrt( this.props.map.length )
 
-        let renderRect = {
+        let screenRect = {
             x1: 0,
             y1: 0,
-            x2: ~~( this.width / CELL_SIZE ),
-            y2: ~~( this.height / CELL_SIZE )
+            x2: ~~( this.width / CELL_SIZE.x ),
+            y2: ~~( this.height / CELL_SIZE.y )
         }
 
-        this.ctx.clearRect( renderRect.x1, renderRect.y1, renderRect.x2, renderRect.y2 )
-        this.ctx.font = CELL_SIZE * 1.2 + 'px sans-serif'
+        console.log( screenRect )
+
+        this.ctx.clearRect( screenRect.x1, screenRect.y1, screenRect.x2, screenRect.y2 )
+        this.ctx.font = MASTER_CELL_SIZE * 1.1 + 'px deja-vu-sans-mono'
 
         // Render left to right then top to bottom
         // Add one to render size to ensure no ugly blank half edges
-        for ( let y = renderRect.y1; y < renderRect.y2 + 1; y++ ) {
-            for ( let x = renderRect.x1; x < renderRect.x2 + 1; x++ ) {
+        for ( let y = screenRect.y1; y < screenRect.y2 + 1; y++ ) {
+            for ( let x = screenRect.x1; x < screenRect.x2 + 1; x++ ) {
                 let opacity = this.props.map[ to1d( x, y, size ) ] / 0xff
-                this.ctx.fillStyle = 'rgba( 255, 255, 255, ' + opacity + ' )'
-                this.ctx.fillText( 'M', x * CELL_SIZE, y * CELL_SIZE )
+                this.ctx.fillStyle = 'rgba( 96, 64, 64, ' + opacity + ' )'
+                this.ctx.fillText( this.getTexture(), x * CELL_SIZE.x, y * CELL_SIZE.y )
             }
         }
     }
