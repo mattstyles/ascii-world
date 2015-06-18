@@ -1,8 +1,11 @@
 
 import React from 'react'
 
-import dispatcher from './dispatchers/appDispatcher'
-import MyComponent from 'myComponent'
+import MapView from 'map/mapView'
+
+import dispatcher from 'dispatchers/appDispatcher'
+import GameState from 'state/game'
+import { EVENTS } from 'config/events'
 
 class App extends React.Component {
     constructor() {
@@ -12,12 +15,15 @@ class App extends React.Component {
     render() {
         return (
             <div className="container">
-                <h1>Hello <strong>React</strong></h1>
-                <p>This is a paragraph with some <strong>strong</strong> words in it which might get bolded</p>
-                <MyComponent />
+                <MapView />
             </div>
         )
     }
 }
 
-React.render( <App />, document.body )
+function render() {
+    React.render( <App />, document.body )
+}
+
+
+GameState.on( EVENTS.READY, render )
