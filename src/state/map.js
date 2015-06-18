@@ -1,6 +1,7 @@
 
 import DisplacementMap from 'displacement-map'
 
+import { to1d } from 'core/utils/maths'
 
 const SIZE = 0x41
 
@@ -27,7 +28,16 @@ class MapGen {
                 height: SIZE
             })
                 .then( map => {
-                    resolve( map )
+                    // Generation requires n^2 + 1, the chunk should be ^2
+                    let chunkSize = SIZE - 1
+                    let chunk = new Uint8Array( chunkSize * chunkSize )
+                    for ( let x = 0; x < SIZE - 1; x++ ) {
+                        for ( let y = 0; y < SIZE - 1; y++ ) {
+                            chunk[ to1d( x, y, SIZE - 1 ) ] = map[ to1d( x, y, SIZE ) ]
+                        }
+                    }
+
+                    resolve( chunk )
                 })
                 .catch( reject )
         })
