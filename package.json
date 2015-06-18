@@ -9,13 +9,14 @@
     "test": "babel-node ./spec/index.js ./src/**/*.test.js",
     "clean": "rm -rf ./dist/ && mkdir ./dist",
     "livereload": "livereload ./dist/",
+    "serve": "serve -SJ --no-less ./dist/",
     "lint": "eslint ./src/*.js",
     "build:styles": "ho-compile -p src,node_modules,src/core/styles --source-map < ./src/styles.less | autoprefixer -b \"last 2 versions\" > ./dist/styles.css",
     "make:styles": "ho-compile -p src,node_modules,src/core/styles -c < ./src/styles.less | autoprefixer -b \"last 2 versions \"  | cleancss > ./dist/styles.css",
     "watch:styles": "find src -name '*.less' -print0 | xargs -0 ./bin/lesswatch -e src/styles.less -o ./dist/styles.css",
-    "build:scripts": "NODE_PATH=./src/components browserify ./src/main.jsx --extension .jsx --noparse react -t babelify -t aliasify -t flowcheck --debug > ./dist/main.js",
-    "make:scripts": "NODE_PATH=./src/components NODE_ENV=prod browserify ./src/main.jsx --extension .jsx -t babelify | uglifyjs > ./dist/main.js",
-    "watch:scripts": "NODE_PATH=./src/components watchify ./src/main.jsx --extension .jsx --noparse react -t babelify -t aliasify -t flowcheck --debug -o ./dist/main.js -v",
+    "build:scripts": "NODE_PATH=./src/components:./src browserify ./src/main.jsx --extension .jsx -t babelify -t flowcheck --debug > ./dist/main.js",
+    "make:scripts": "NODE_PATH=./src/components:./src NODE_ENV=prod browserify ./src/main.jsx --extension .jsx -t babelify | uglifyjs > ./dist/main.js",
+    "watch:scripts": "NODE_PATH=./src/components:./src watchify ./src/main.jsx --extension .jsx -t babelify -t flowcheck --debug -o ./dist/main.js -v",
     "make:polyfill": "browserify ./src/polyfill.js | uglifyjs > ./dist/polyfill.js",
     "make:assets": "cp -r ./src/assets ./dist/assets",
     "make:html": "mustache package.json ./src/tmpl/index.hjs > ./dist/index.html",
@@ -24,11 +25,6 @@
     "build": "npm run make:assets && npm run make:html && npm run make:polyfill && npm run build:scripts && npm run build:styles",
     "premake": "npm run clean",
     "make": "NODE_ENV=prod npm run make:assets && npm run make:html && npm run make:polyfill && npm run make:scripts && npm run make:styles"
-  },
-  "aliasify": {
-    "aliases": {
-      "react": "react/dist/react"
-    }
   },
   "keywords": [
     "yeoman",
@@ -78,6 +74,7 @@
     "minimist": "^1.1.1",
     "mustache": "^2.0.0",
     "parallelshell": "^1.1.1",
+    "serve": "^1.4.0",
     "tape": "^4.0.0",
     "uglifyjs": "^2.4.10",
     "watch": "^0.16.0",

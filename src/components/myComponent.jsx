@@ -18,7 +18,7 @@ export default class MyComponent extends React.Component {
         return (
             <div>
                 <h2>{ MyComponent.stuff.foo }</h2>
-                <button onClick={this.myOnClick}>Click me</button>
+                <button onClick={this.myOnClick}>Click <em>me</em></button>
             </div>
         )
     }

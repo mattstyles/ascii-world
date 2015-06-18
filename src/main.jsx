@@ -1,6 +1,4 @@
 
-import './utils/font'
-
 import React from 'react'
 
 import dispatcher from './dispatchers/appDispatcher'
@@ -14,7 +12,8 @@ class App extends React.Component {
     render() {
         return (
             <div className="container">
-                <h1>Hello React</h1>
+                <h1>Hello <strong>React</strong></h1>
+                <p>This is a paragraph with some <strong>strong</strong> words in it which might get bolded</p>
                 <MyComponent />
             </div>
         )
