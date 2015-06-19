@@ -103,6 +103,8 @@ export default class WorldView extends React.Component {
 
         // Assume world to be a square of chunks
         let size = Math.sqrt( this.props.world.length )
+
+        let start = performance.now()
         this.props.world.forEach( ( chunk, index ) => {
             // For now create a new view for each chunk
             // @TODO should reuse these
@@ -120,6 +122,7 @@ export default class WorldView extends React.Component {
         })
 
         console.log( 'chunks rendered', count )
+        console.log( 'world render time', ( performance.now() - start ).toFixed( 2 ), 'ms' )
     }
 
     render() {

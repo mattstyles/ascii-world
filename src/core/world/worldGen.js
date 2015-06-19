@@ -18,9 +18,9 @@ class WorldGen {
 
     scaffoldWorld() {
         return new Promise( ( resolve, reject ) => {
-            // For now create a 4x4 chunk world
+            // For now create a 8x8 chunk world
             let working = []
-            for( let i = 0; i < 16; i++ ) {
+            for( let i = 0; i < 64; i++ ) {
                 working.push( this.createChunk() )
             }
 

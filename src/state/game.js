@@ -18,9 +18,10 @@ class GameState extends EventEmitter {
         //         this.emit( EVENTS.READY )
         //     })
 
+        var start = performance.now()
         worldGen.scaffoldWorld()
             .then( chunks => {
-                console.log( 'World Scaffold Complete' )
+                console.log( 'World Scaffold Complete', ( performance.now() - start ).toFixed( 2 ), 'ms' )
                 this.world = chunks
                 this.emit( EVENTS.READY )
             })
