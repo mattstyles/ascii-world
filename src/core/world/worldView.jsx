@@ -27,8 +27,8 @@ export default class WorldView extends React.Component {
         super( props )
 
         // @TODO these should update on screen redimension
-        this.width = document.documentElement.clientWidth
-        this.height = document.documentElement.clientHeight
+        this.canvasWidth = document.documentElement.clientWidth
+        this.canvasHeight = document.documentElement.clientHeight
     }
 
     componentDidMount() {
@@ -38,6 +38,7 @@ export default class WorldView extends React.Component {
 
         // Set up render environment based on current screen settings
         // @TODO update this on screen redimension
+        this.defineScreen()
 
         this.renderMap()
     }
@@ -48,17 +49,20 @@ export default class WorldView extends React.Component {
         this.renderMap()
     }
 
-    renderMap() {
-        let screenRect = {
+    defineScreen() {
+        this.screenRect = {
             x1: 0,
             y1: 0,
-            x2: ~~( this.width / CELL_SIZE.x ),
-            y2: ~~( this.height / CELL_SIZE.y )
+            x2: ~~( this.canvasWidth / CELL_SIZE.x ),
+            y2: ~~( this.canvasHeight / CELL_SIZE.y )
         }
 
-        console.log( 'screen rect:', screenRect )
+        console.log( 'screen rect:', this.screenRect )
+    }
 
-        this.ctx.clearRect( screenRect.x1, screenRect.y1, screenRect.x2, screenRect.y2 )
+    renderMap() {
+
+        this.ctx.clearRect( 0, 0, this.canvasWidth, this.canvasHeight )
         this.ctx.font = MASTER_CELL_SIZE * 1.1 + 'px deja-vu-sans-mono'
 
         // @TODO calculate how many chunks are needed to fill the screen
@@ -67,20 +71,20 @@ export default class WorldView extends React.Component {
         // update when the props change, then we get Reacts diffing algorithm
         // to decide if a chunk should re-render or not
         let chunkView = new ChunkView({
-            ctx: this.ctx
+            ctx: this.ctx,
+            cell: {
+                width: CELL_SIZE.x,
+                height: CELL_SIZE.y
+            }
         })
 
         // For now render the same chunk to fill the screen
         let count = 0
-        for ( let y = 0; y < screenRect.y2; y += CHUNK_SIZE ) {
-            for ( let x = 0; x < screenRect.x2; x += CHUNK_SIZE ) {
+        for ( let y = 0; y < this.screenRect.y2; y += CHUNK_SIZE ) {
+            for ( let x = 0; x < this.screenRect.x2; x += CHUNK_SIZE ) {
                 chunkView.render({
                     chunk: this.props.map,
-                    renderRect: new Rect( x, y, x + CHUNK_SIZE - 1, y + CHUNK_SIZE - 1 ),
-                    cell: {
-                        width: CELL_SIZE.x,
-                        height: CELL_SIZE.y
-                    }
+                    renderRect: new Rect( x, y, x + CHUNK_SIZE - 1, y + CHUNK_SIZE - 1 )
                 })
                 count = count + 1
             }

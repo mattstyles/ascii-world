@@ -2,7 +2,7 @@
 import DisplacementMap from 'displacement-map'
 
 import config from 'config/gameConf'
-import { to1d } from 'core/utils/maths'
+import { to1d, to2d } from 'core/utils/maths'
 
 const SIZE = config.getIn( [ 'map', 'chunkSize' ] )
 
@@ -10,6 +10,26 @@ const SIZE = config.getIn( [ 'map', 'chunkSize' ] )
 class MapGen {
     constructor() {
         this.generator = new DisplacementMap()
+
+        // @type <Array:Chunks>
+        // @TODO this is a generator, should not hold state
+        this.world = []
+    }
+
+    scaffoldWorld() {
+        return new Promise( ( resolve, reject ) => {
+            // For now create a 10x10 chunk world
+            let working = []
+            for( let i = 0; i < 10 * 10; i++ ) {
+                working.push( this.createChunk() )
+            }
+
+            // When all the promises have resolved then return the
+            // resultant array of chunks as the world
+            Promise.all( working )
+                .then( resolve )
+                .catch( reject )
+        })
     }
 
     createChunk() {

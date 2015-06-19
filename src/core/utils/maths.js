@@ -1,9 +1,5 @@
 
 
-export function to1d( x, y, width ) {
-    return ( y * width ) + x
-}
-
 export class Point {
     constructor( x, y ) {
         this.x = x
@@ -19,4 +15,13 @@ export class Rect {
         this.width = x2 - x1
         this.height = y2 - y1
     }
+}
+
+
+export function to1d( x, y, width ) {
+    return ( y * width ) + x
+}
+
+export function to2d( num, width ) {
+    return new Point( num % width, ~~( num / width ) )
 }

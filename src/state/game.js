@@ -8,17 +8,26 @@ class GameState extends EventEmitter {
     constructor() {
         super()
 
+        this.world = null
+
         // To kickstart things off lets request a new map
-        worldGen.createChunk()
-            .then( map => {
-                // @TODO should add chunk to overall map
-                this.map = map
+        // worldGen.createChunk()
+        //     .then( map => {
+        //         // @TODO should add chunk to overall map
+        //         this.map = map
+        //         this.emit( EVENTS.READY )
+        //     })
+
+        worldGen.scaffoldWorld()
+            .then( chunks => {
+                console.log( 'World Scaffold Complete' )
+                this.world = chunks
                 this.emit( EVENTS.READY )
             })
     }
 
-    getMap() {
-        return this.map
+    getWorld() {
+        return this.world
     }
 
 }
