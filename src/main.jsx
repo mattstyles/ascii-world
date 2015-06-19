@@ -16,7 +16,7 @@ class App extends React.Component {
         return (
             <div className="container">
                 {/* <span className="debug">M</span> */}
-                <WorldView map={ GameState.getWorld() } />
+                <WorldView world={ GameState.getWorld() } />
             </div>
         )
     }

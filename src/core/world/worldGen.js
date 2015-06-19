@@ -18,9 +18,9 @@ class MapGen {
 
     scaffoldWorld() {
         return new Promise( ( resolve, reject ) => {
-            // For now create a 10x10 chunk world
+            // For now create a 4x4 chunk world
             let working = []
-            for( let i = 0; i < 10 * 10; i++ ) {
+            for( let i = 0; i < 16; i++ ) {
                 working.push( this.createChunk() )
             }
 

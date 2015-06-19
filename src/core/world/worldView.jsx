@@ -1,7 +1,7 @@
 
 import React from 'react'
 
-import { to1d, Point, Rect } from 'core/utils/maths'
+import { to2d, Rect } from 'core/utils/maths'
 import ChunkView from 'core/world/chunkView'
 import config from 'config/gameConf'
 
@@ -20,7 +20,8 @@ const CELL_SIZE = {
  */
 export default class WorldView extends React.Component {
     static propTypes = {
-        map: React.PropTypes.object
+        // Array of chunks which define the world
+        world: React.PropTypes.array
     }
 
     constructor( props ) {
@@ -33,7 +34,6 @@ export default class WorldView extends React.Component {
 
     componentDidMount() {
         console.log( 'MapView::componentDidMount' )
-        console.log( this.props.map )
         this.ctx = this.refs[ 'map-canvas' ].getDOMNode().getContext( '2d' )
 
         // Set up render environment based on current screen settings
@@ -80,15 +80,30 @@ export default class WorldView extends React.Component {
 
         // For now render the same chunk to fill the screen
         let count = 0
-        for ( let y = 0; y < this.screenRect.y2; y += CHUNK_SIZE ) {
-            for ( let x = 0; x < this.screenRect.x2; x += CHUNK_SIZE ) {
-                chunkView.render({
-                    chunk: this.props.map,
-                    renderRect: new Rect( x, y, x + CHUNK_SIZE - 1, y + CHUNK_SIZE - 1 )
-                })
-                count = count + 1
-            }
-        }
+        // for ( let y = 0; y < this.screenRect.y2; y += CHUNK_SIZE ) {
+        //     for ( let x = 0; x < this.screenRect.x2; x += CHUNK_SIZE ) {
+        //         chunkView.render({
+        //             chunk: this.props.world,
+        //             renderRect: new Rect( x, y, x + CHUNK_SIZE - 1, y + CHUNK_SIZE - 1 )
+        //         })
+        //         count = count + 1
+        //     }
+        // }
+        // For now dont view cull any chunks, render them all
+        // Assume world to be a square of chunks
+        let size = Math.sqrt( this.props.world.length )
+        this.props.world.forEach( ( chunk, index ) => {
+            let chunkPos = to2d( index, size )
+            chunkPos.x *= CHUNK_SIZE
+            chunkPos.y *= CHUNK_SIZE
+            chunkView.render({
+                chunk: chunk,
+                renderRect: new Rect( 0, 0, CHUNK_SIZE - 1, CHUNK_SIZE - 1 ),
+                position: chunkPos
+            })
+            count++
+        })
+
         console.log( 'chunks rendered', count )
     }
 
@@ -98,8 +113,8 @@ export default class WorldView extends React.Component {
             <canvas
                 ref="map-canvas"
                 className="Map js-map u-fit-fix"
-                width={ this.width }
-                height={ this.height }>
+                width={ this.canvasWidth }
+                height={ this.canvasHeight }>
             </canvas>
         )
     }
