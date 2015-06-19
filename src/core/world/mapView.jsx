@@ -2,7 +2,7 @@
 import React from 'react'
 
 import { to1d, Point, Rect } from 'core/utils/maths'
-import ChunkView from 'components/map/chunkView'
+import ChunkView from 'core/map/chunkView'
 import config from 'config/gameConf'
 
 const CHUNK_SIZE = config.getIn( [ 'map', 'chunkSize' ] )
@@ -35,6 +35,9 @@ export default class MapView extends React.Component {
         console.log( 'MapView::componentDidMount' )
         console.log( this.props.map )
         this.ctx = this.refs[ 'map-canvas' ].getDOMNode().getContext( '2d' )
+
+        // Set up render environment based on current screen settings
+        // @TODO update this on screen redimension
 
         this.renderMap()
     }
