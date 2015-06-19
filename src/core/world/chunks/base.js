@@ -4,13 +4,13 @@ import { to1d, Point } from 'core/utils/maths'
 /**
  * Responsible for rendering a whole chunk
  */
-export default class ChunkView {
+export default class BaseChunkView {
     constructor( opts ) {
         this.ctx = opts.ctx
         this.cellDef = opts.cell
     }
 
-    getTexture() {
+    getTexture( cell ) {
         // Randomly return for now
         let texture = [
             '.',
@@ -40,7 +40,7 @@ export default class ChunkView {
 
     renderCell( cell, position ) {
         this.ctx.fillStyle = this.getFillStyle( cell )
-        this.ctx.fillText( this.getTexture(), position.x, position.y )
+        this.ctx.fillText( this.getTexture( cell ), position.x, position.y )
     }
 
     /**

@@ -2,7 +2,9 @@
 import React from 'react'
 
 import { to2d, Rect } from 'core/utils/maths'
-import ChunkView from 'core/world/chunkView'
+import ChunkView from 'core/world/chunks/base'
+import CaveChunk from 'core/world/chunks/cave'
+import PlainChunk from 'core/world/chunks/plain'
 import config from 'config/gameConf'
 
 const CHUNK_SIZE = config.getIn( [ 'map', 'chunkSize' ] )
@@ -60,6 +62,23 @@ export default class WorldView extends React.Component {
         console.log( 'screen rect:', this.screenRect )
     }
 
+    /**
+     * Randomly returns a type of chunk
+     */
+    getChunkView() {
+        let opts = {
+            ctx: this.ctx,
+            cell: {
+                width: CELL_SIZE.x,
+                height: CELL_SIZE.y
+            }
+        }
+
+        let chunkTypes = [ CaveChunk, PlainChunk ]
+
+        return new chunkTypes[ ~~( Math.random() * 2 ) ]( opts )
+    }
+
     renderMap() {
 
         this.ctx.clearRect( 0, 0, this.canvasWidth, this.canvasHeight )
@@ -70,29 +89,25 @@ export default class WorldView extends React.Component {
         // * better might be to let React handle each chunk view and only
         // update when the props change, then we get Reacts diffing algorithm
         // to decide if a chunk should re-render or not
-        let chunkView = new ChunkView({
-            ctx: this.ctx,
-            cell: {
-                width: CELL_SIZE.x,
-                height: CELL_SIZE.y
-            }
-        })
-
-        // For now render the same chunk to fill the screen
-        let count = 0
-        // for ( let y = 0; y < this.screenRect.y2; y += CHUNK_SIZE ) {
-        //     for ( let x = 0; x < this.screenRect.x2; x += CHUNK_SIZE ) {
-        //         chunkView.render({
-        //             chunk: this.props.world,
-        //             renderRect: new Rect( x, y, x + CHUNK_SIZE - 1, y + CHUNK_SIZE - 1 )
-        //         })
-        //         count = count + 1
+        // let chunkView = new ChunkView({
+        //     ctx: this.ctx,
+        //     cell: {
+        //         width: CELL_SIZE.x,
+        //         height: CELL_SIZE.y
         //     }
-        // }
+        // })
+
+
         // For now dont view cull any chunks, render them all
+        let count = 0
+
         // Assume world to be a square of chunks
         let size = Math.sqrt( this.props.world.length )
         this.props.world.forEach( ( chunk, index ) => {
+            // For now create a new view for each chunk
+            // @TODO should reuse these
+            let chunkView = this.getChunkView()
+
             let chunkPos = to2d( index, size )
             chunkPos.x *= CHUNK_SIZE
             chunkPos.y *= CHUNK_SIZE
