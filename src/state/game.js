@@ -2,7 +2,7 @@
 import EventEmitter from 'eventemitter3'
 
 import { EVENTS } from 'config/events'
-import mapGen from 'state/map'
+import mapGen from 'core/map/mapGen'
 
 class GameState extends EventEmitter {
     constructor() {

@@ -1,7 +1,8 @@
 
 import React from 'react'
 
-import { to1d } from 'core/utils/maths'
+import { to1d, Point, Rect } from 'core/utils/maths'
+import ChunkView from 'components/map/chunkView'
 
 
 // @TODO this should probably be a bit responsive
@@ -40,30 +41,6 @@ export default class MapView extends React.Component {
         this.renderMap()
     }
 
-    getTexture() {
-        // Randomly return for now
-        let texture = [
-            '.',
-            ',',
-            '\'',
-            '\"',
-            ' ',
-            ' ',
-            ' ',
-            ' ',
-            ' ',
-            ' ',
-            ' ',
-            ' ',
-            ' ',
-            ' ',
-            ' ',
-            ' '
-        ]
-
-        return texture[ ~~( Math.random() * texture.length ) ]
-    }
-
     renderMap() {
         // @TODO chunk size should be hard-wired somewhere, probably in config
         let size = Math.sqrt( this.props.map.length )
@@ -75,20 +52,25 @@ export default class MapView extends React.Component {
             y2: ~~( this.height / CELL_SIZE.y )
         }
 
-        console.log( screenRect )
+        console.log( 'screen rect:', screenRect )
 
         this.ctx.clearRect( screenRect.x1, screenRect.y1, screenRect.x2, screenRect.y2 )
         this.ctx.font = MASTER_CELL_SIZE * 1.1 + 'px deja-vu-sans-mono'
 
-        // Render left to right then top to bottom
-        // Add one to render size to ensure no ugly blank half edges
-        for ( let y = screenRect.y1; y < screenRect.y2 + 1; y++ ) {
-            for ( let x = screenRect.x1; x < screenRect.x2 + 1; x++ ) {
-                let opacity = this.props.map[ to1d( x, y, size ) ] / 0xff
-                this.ctx.fillStyle = 'rgba( 96, 64, 64, ' + opacity + ' )'
-                this.ctx.fillText( this.getTexture(), x * CELL_SIZE.x, y * CELL_SIZE.y )
+        let chunkView = new ChunkView({
+            ctx: this.ctx
+        })
+
+        // For now render the same chunk to fill the screen
+
+        chunkView.render({
+            chunk: this.props.map,
+            renderRect: new Rect( 0, 0, size - 1, size - 1 ),
+            cell: {
+                width: CELL_SIZE.x,
+                height: CELL_SIZE.y
             }
-        }
+        })
     }
 
     render() {
