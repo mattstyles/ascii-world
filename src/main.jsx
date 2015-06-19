@@ -15,7 +15,7 @@ class App extends React.Component {
     render() {
         return (
             <div className="container">
-                <span className="debug">M</span>
+                {/* <span className="debug">M</span> */}
                 <MapView map={ GameState.getMap() } />
             </div>
         )

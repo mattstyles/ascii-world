@@ -9,10 +9,6 @@ class GameState extends EventEmitter {
         super()
 
         // To kickstart things off lets request a new map
-        setTimeout( () => {
-            this.emit( EVENTS.READY )
-        }, 500 )
-
         mapGen.createChunk()
             .then( map => {
                 // @TODO should add chunk to overall map

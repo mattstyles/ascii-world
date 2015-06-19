@@ -32,9 +32,9 @@ class MapGen {
                 .then( map => {
                     // Generation requires n^2 + 1, the chunk should be ^2
                     let chunk = new Uint8Array( SIZE * SIZE )
-                    for ( let x = 0; x < SIZE - 1; x++ ) {
-                        for ( let y = 0; y < SIZE - 1; y++ ) {
-                            chunk[ to1d( x, y, SIZE - 1 ) ] = map[ to1d( x, y, SIZE ) ]
+                    for ( let x = 0; x < SIZE; x++ ) {
+                        for ( let y = 0; y < SIZE; y++ ) {
+                            chunk[ to1d( x, y, SIZE ) ] = map[ to1d( x, y, genSize ) ]
                         }
                     }
 

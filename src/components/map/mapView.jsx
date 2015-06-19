@@ -3,7 +3,9 @@ import React from 'react'
 
 import { to1d, Point, Rect } from 'core/utils/maths'
 import ChunkView from 'components/map/chunkView'
+import config from 'config/gameConf'
 
+const CHUNK_SIZE = config.getIn( [ 'map', 'chunkSize' ] )
 
 // @TODO this should probably be a bit responsive
 const MASTER_CELL_SIZE = 18
@@ -33,6 +35,8 @@ export default class MapView extends React.Component {
         console.log( 'MapView::componentDidMount' )
         console.log( this.props.map )
         this.ctx = this.refs[ 'map-canvas' ].getDOMNode().getContext( '2d' )
+
+        this.renderMap()
     }
 
     componentDidUpdate() {
@@ -42,9 +46,6 @@ export default class MapView extends React.Component {
     }
 
     renderMap() {
-        // @TODO chunk size should be hard-wired somewhere, probably in config
-        let size = Math.sqrt( this.props.map.length )
-
         let screenRect = {
             x1: 0,
             y1: 0,
@@ -62,15 +63,21 @@ export default class MapView extends React.Component {
         })
 
         // For now render the same chunk to fill the screen
-
-        chunkView.render({
-            chunk: this.props.map,
-            renderRect: new Rect( 0, 0, size - 1, size - 1 ),
-            cell: {
-                width: CELL_SIZE.x,
-                height: CELL_SIZE.y
+        let count = 0
+        for ( let y = 0; y < screenRect.y2; y += CHUNK_SIZE ) {
+            for ( let x = 0; x < screenRect.x2; x += CHUNK_SIZE ) {
+                chunkView.render({
+                    chunk: this.props.map,
+                    renderRect: new Rect( x, y, x + CHUNK_SIZE - 1, y + CHUNK_SIZE - 1 ),
+                    cell: {
+                        width: CELL_SIZE.x,
+                        height: CELL_SIZE.y
+                    }
+                })
+                count = count + 1
             }
-        })
+        }
+        console.log( 'chunks rendered', count )
     }
 
     render() {

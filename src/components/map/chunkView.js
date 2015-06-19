@@ -45,7 +45,7 @@ export default class ChunkView {
             for( let x = params.renderRect.from.x; x <= params.renderRect.to.x; x++ ) {
                 let opacity = params.chunk[ to1d( x, y, size ) ] / 0xff
                 this.ctx.fillStyle = 'rgba( 96, 64, 64, ' + opacity + ' )'
-                this.ctx.fillText( '|', x * params.cell.width, y * params.cell.height )
+                this.ctx.fillText( this.getTexture(), x * params.cell.width, y * params.cell.height )
             }
         }
     }
