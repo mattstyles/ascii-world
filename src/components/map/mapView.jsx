@@ -58,6 +58,11 @@ export default class MapView extends React.Component {
         this.ctx.clearRect( screenRect.x1, screenRect.y1, screenRect.x2, screenRect.y2 )
         this.ctx.font = MASTER_CELL_SIZE * 1.1 + 'px deja-vu-sans-mono'
 
+        // @TODO calculate how many chunks are needed to fill the screen
+        // and only create that many, then change their contents to render
+        // * better might be to let React handle each chunk view and only
+        // update when the props change, then we get Reacts diffing algorithm
+        // to decide if a chunk should re-render or not
         let chunkView = new ChunkView({
             ctx: this.ctx
         })
