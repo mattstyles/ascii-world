@@ -51,6 +51,7 @@
     "displacement-map": "^0.4.0",
     "eventemitter3": "^1.1.0",
     "flux": "^2.0.3",
+    "immutable": "^3.7.4",
     "normalize.css": "^3.0.3",
     "react": "^0.13.3",
     "react-router": "^0.13.3",
