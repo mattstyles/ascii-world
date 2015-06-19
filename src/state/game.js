@@ -2,14 +2,14 @@
 import EventEmitter from 'eventemitter3'
 
 import { EVENTS } from 'config/events'
-import mapGen from 'core/map/mapGen'
+import worldGen from 'core/world/worldGen'
 
 class GameState extends EventEmitter {
     constructor() {
         super()
 
         // To kickstart things off lets request a new map
-        mapGen.createChunk()
+        worldGen.createChunk()
             .then( map => {
                 // @TODO should add chunk to overall map
                 this.map = map

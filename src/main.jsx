@@ -1,7 +1,7 @@
 
 import React from 'react'
 
-import MapView from 'map/mapView'
+import WorldView from 'world/worldView'
 
 import dispatcher from 'dispatchers/appDispatcher'
 import GameState from 'state/game'
@@ -16,7 +16,7 @@ class App extends React.Component {
         return (
             <div className="container">
                 {/* <span className="debug">M</span> */}
-                <MapView map={ GameState.getMap() } />
+                <WorldView map={ GameState.getMap() } />
             </div>
         )
     }

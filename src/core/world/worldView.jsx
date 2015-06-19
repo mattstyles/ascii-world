@@ -2,7 +2,7 @@
 import React from 'react'
 
 import { to1d, Point, Rect } from 'core/utils/maths'
-import ChunkView from 'core/map/chunkView'
+import ChunkView from 'core/world/chunkView'
 import config from 'config/gameConf'
 
 const CHUNK_SIZE = config.getIn( [ 'map', 'chunkSize' ] )
@@ -18,7 +18,7 @@ const CELL_SIZE = {
  * Given a bounding box and a map, it'll render the portion that
  * should be showing
  */
-export default class MapView extends React.Component {
+export default class WorldView extends React.Component {
     static propTypes = {
         map: React.PropTypes.object
     }
