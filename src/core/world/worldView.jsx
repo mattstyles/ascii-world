@@ -7,7 +7,7 @@ import CaveChunk from 'core/world/chunks/cave'
 import PlainChunk from 'core/world/chunks/plain'
 import config from 'config/gameConf'
 
-const CHUNK_SIZE = config.getIn( [ 'map', 'chunkSize' ] )
+const CHUNK_SIZE = config.getIn( [ 'world', 'chunkSize' ] )
 
 // @TODO this should probably be a bit responsive
 const MASTER_CELL_SIZE = 18

@@ -4,10 +4,10 @@ import DisplacementMap from 'displacement-map'
 import config from 'config/gameConf'
 import { to1d, to2d } from 'core/utils/maths'
 
-const SIZE = config.getIn( [ 'map', 'chunkSize' ] )
+const SIZE = config.getIn( [ 'world', 'chunkSize' ] )
 
 
-class MapGen {
+class WorldGen {
     constructor() {
         this.generator = new DisplacementMap()
 
@@ -67,4 +67,4 @@ class MapGen {
 
 }
 
-export default new MapGen()
+export default new WorldGen()

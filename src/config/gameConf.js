@@ -2,7 +2,7 @@
 import Immutable from 'immutable'
 
 export default Immutable.fromJS({
-    map: {
+    world: {
         chunkSize: 0x10
     }
 })
