@@ -47,7 +47,8 @@ class WorldGen {
             this.generator.generate({
                 map: buf8,
                 width: genSize,
-                height: genSize
+                height: genSize,
+                roughness: 1.6
             })
                 .then( map => {
                     // Generation requires n^2 + 1, the chunk should be ^2
