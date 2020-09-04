@@ -53,7 +53,7 @@
     "flux": "^2.0.3",
     "immutable": "^3.7.4",
     "normalize.css": "^3.0.3",
-    "react": "^0.13.3",
+    "react": "^15.6.2",
     "react-router": "^0.13.3",
     "webfontloader": "^1.5.18",
     "whatwg-fetch": "^0.8.1"
